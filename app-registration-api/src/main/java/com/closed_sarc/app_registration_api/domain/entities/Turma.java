@@ -28,5 +28,11 @@ public class Turma {
     @Column(length = 50)
     private String periodo;
 
-    private UUID professorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "professor_id")
+    private Usuario professor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "disciplina_id")
+    private Disciplina disciplina;
 }

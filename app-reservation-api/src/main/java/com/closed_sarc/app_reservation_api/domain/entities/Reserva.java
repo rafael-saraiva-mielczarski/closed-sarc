@@ -1,4 +1,4 @@
-package com.closed_sarc.reservation.domain;
+package com.closed_sarc.app_reservation_api.domain.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
