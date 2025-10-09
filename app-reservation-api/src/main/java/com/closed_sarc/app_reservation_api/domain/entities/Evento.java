@@ -1,4 +1,4 @@
-package com.closed_sarc.reservation.domain;
+package com.closed_sarc.app_reservation_api.domain.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
@@ -27,5 +27,7 @@ public class Evento {
     @Column(name="data_fim")
     private Instant dataFim;
 
-    private UUID reservaId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reserva_id")
+    private Reserva reserva;
 }

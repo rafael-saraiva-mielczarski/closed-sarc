@@ -1,6 +1,6 @@
-package com.closed_sarc.reservation.repository;
+package com.closed_sarc.app_reservation_api.domain.repositories;
 
-import com.closed_sarc.reservation.domain.Recurso;
+import com.closed_sarc.app_reservation_api.domain.entities.Recurso;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.UUID;
 
