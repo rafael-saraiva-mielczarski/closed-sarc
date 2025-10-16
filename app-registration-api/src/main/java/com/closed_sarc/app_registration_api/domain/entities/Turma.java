@@ -1,9 +1,24 @@
 package com.closed_sarc.app_registration_api.domain.entities;
 
-import lombok.*;
-import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "turma")
@@ -29,6 +44,9 @@ public class Turma {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 5)
     private Horario horario;
+
+    @Column(nullable = false, length = 100)
+    private String sala;
 
     @ElementCollection
     @CollectionTable(name = "turma_dias_aula", joinColumns = @JoinColumn(name = "turma_id"))

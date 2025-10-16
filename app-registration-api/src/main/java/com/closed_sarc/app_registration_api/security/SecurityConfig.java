@@ -31,13 +31,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(basic -> {})
+                        .requestMatchers("/api/cronograma/**").permitAll() // Permitir acesso público ao cronograma
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Permitir
+                                                                                                              // acesso
+                                                                                                              // ao
+                                                                                                              // OpenAPI
+                        .anyRequest().authenticated())
+                .httpBasic(basic -> {
+                })
                 .formLogin(form -> form.disable());
 
         return http.build();
     }
 }
-
-
