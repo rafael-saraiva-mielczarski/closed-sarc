@@ -17,4 +17,8 @@ public interface TurmaRepository extends JpaRepository<Turma, UUID> {
       "JOIN FETCH t.disciplina " +
       "WHERE :diaSemana MEMBER OF t.diasAula")
   List<Turma> findByDiasAulaContaining(@Param("diaSemana") DiaSemana diaSemana);
+
+  List<Turma> findByProfessorId(UUID professorId);
+  
+  List<Turma> findByDisciplinaId(UUID disciplinaId);
 }

@@ -1,5 +1,6 @@
 package com.closed_sarc.app_registration_api.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Turma {
     @Id
     @GeneratedValue
@@ -45,7 +47,7 @@ public class Turma {
     @Column(nullable = false, length = 5)
     private Horario horario;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = true, length = 100)
     private String sala;
 
     @ElementCollection
