@@ -2,95 +2,88 @@ package com.closed_sarc.app_registration_api.service;
 
 import com.closed_sarc.app_registration_api.application.dto.RecursoDTO;
 import com.closed_sarc.app_registration_api.application.dto.RecursoRequestDTO;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class RecursoService {
     
-    private final WebClient reservationApiWebClient;
+    @Value("${reservation-api.base-url}")
+    private String baseUrl;
+    
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public RecursoDTO create(RecursoRequestDTO recursoRequest) {
         try {
-            log.info("Criando recurso: {}", recursoRequest.getNome());
+            log.info("Criando recurso: {} - URL: {}", recursoRequest.getNome(), baseUrl + "/api/recursos");
             
-            RecursoDTO response = reservationApiWebClient
-                    .post()
-                    .uri("/api/recursos")
-                    .bodyValue(recursoRequest)
-                    .retrieve()
-                    .bodyToMono(RecursoDTO.class)
-                    .block();
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Content-Type", "application/json");
             
-            log.info("Recurso criado com sucesso: {}", response.getId());
-            return response;
+            HttpEntity<RecursoRequestDTO> request = new HttpEntity<>(recursoRequest, headers);
             
-        } catch (WebClientResponseException e) {
-            log.error("Erro ao criar recurso: {}", e.getResponseBodyAsString());
-            throw new RuntimeException("Erro ao criar recurso: " + e.getResponseBodyAsString());
+            ResponseEntity<RecursoDTO> response = restTemplate.postForEntity(
+                baseUrl + "/api/recursos", 
+                request, 
+                RecursoDTO.class
+            );
+            
+            log.info("Recurso criado com sucesso: {}", response.getBody().getId());
+            return response.getBody();
+            
         } catch (Exception e) {
-            log.error("Erro inesperado ao criar recurso", e);
-            throw new RuntimeException("Erro inesperado ao criar recurso", e);
+            log.error("Erro ao criar recurso", e);
+            throw new RuntimeException("Erro ao criar recurso: " + e.getMessage());
         }
     }
 
     public List<RecursoDTO> findAll() {
         try {
-            log.info("Buscando todos os recursos");
+            log.info("Buscando todos os recursos - URL: {}", baseUrl + "/api/recursos");
             
-            List<RecursoDTO> recursos = reservationApiWebClient
-                    .get()
-                    .uri("/api/recursos")
-                    .retrieve()
-                    .bodyToFlux(RecursoDTO.class)
-                    .collectList()
-                    .block();
+            ResponseEntity<RecursoDTO[]> response = restTemplate.getForEntity(
+                baseUrl + "/api/recursos", 
+                RecursoDTO[].class
+            );
             
-            log.info("Encontrados {} recursos", recursos != null ? recursos.size() : 0);
-            return recursos != null ? recursos : List.of();
+            List<RecursoDTO> recursos = Arrays.asList(response.getBody());
+            log.info("Encontrados {} recursos", recursos.size());
+            return recursos;
             
-        } catch (WebClientResponseException e) {
-            log.error("Erro ao buscar recursos: {}", e.getResponseBodyAsString());
-            throw new RuntimeException("Erro ao buscar recursos: " + e.getResponseBodyAsString());
         } catch (Exception e) {
-            log.error("Erro inesperado ao buscar recursos", e);
-            throw new RuntimeException("Erro inesperado ao buscar recursos", e);
+            log.error("Erro ao buscar recursos", e);
+            throw new RuntimeException("Erro ao buscar recursos: " + e.getMessage());
         }
     }
 
     public void delete(UUID id) {
         try {
-            log.info("Excluindo recurso: {}", id);
+            log.info("Excluindo recurso: {} - URL: {}", id, baseUrl + "/api/recursos/" + id);
             
-            reservationApiWebClient
-                    .delete()
-                    .uri("/api/recursos/{id}", id)
-                    .retrieve()
-                    .bodyToMono(Void.class)
-                    .block();
+            restTemplate.delete(baseUrl + "/api/recursos/" + id);
             
             log.info("Recurso excluído com sucesso: {}", id);
             
-        } catch (WebClientResponseException e) {
-            log.error("Erro ao excluir recurso: {}", e.getResponseBodyAsString());
-            throw new RuntimeException("Erro ao excluir recurso: " + e.getResponseBodyAsString());
         } catch (Exception e) {
-            log.error("Erro inesperado ao excluir recurso", e);
-            throw new RuntimeException("Erro inesperado ao excluir recurso", e);
+            log.error("Erro ao excluir recurso", e);
+            throw new RuntimeException("Erro ao excluir recurso: " + e.getMessage());
         }
     }
 
     public RecursoDTO findById(UUID id) {
         try {
-            log.info("Buscando recurso por ID: {}", id);
+            log.info("Buscando recurso por ID: {} - URL: {}", id, baseUrl + "/api/recursos");
             
             // Como não temos endpoint específico por ID na reservation-api,
             // vamos buscar todos e filtrar
