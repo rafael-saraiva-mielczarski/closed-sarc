@@ -13,3 +13,9 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+
+# Configurações para comunicação com reservation-api
+reservation-api:
+  base-url: http://reservation-api:8082
+  username: master@reservation.com
+  password: master123
