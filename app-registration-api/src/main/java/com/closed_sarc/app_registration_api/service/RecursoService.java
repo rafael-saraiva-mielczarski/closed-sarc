@@ -30,6 +30,7 @@ public class RecursoService {
             
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
+            headers.set("Authorization", "Basic " + java.util.Base64.getEncoder().encodeToString("master@reservation.com:master123".getBytes()));
             
             HttpEntity<RecursoRequestDTO> request = new HttpEntity<>(recursoRequest, headers);
             
@@ -52,8 +53,15 @@ public class RecursoService {
         try {
             log.info("Buscando todos os recursos - URL: {}", baseUrl + "/api/recursos");
             
-            ResponseEntity<RecursoDTO[]> response = restTemplate.getForEntity(
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Basic " + java.util.Base64.getEncoder().encodeToString("master@reservation.com:master123".getBytes()));
+            
+            HttpEntity<String> request = new HttpEntity<>(headers);
+            
+            ResponseEntity<RecursoDTO[]> response = restTemplate.exchange(
                 baseUrl + "/api/recursos", 
+                HttpMethod.GET,
+                request,
                 RecursoDTO[].class
             );
             
@@ -71,7 +79,17 @@ public class RecursoService {
         try {
             log.info("Excluindo recurso: {} - URL: {}", id, baseUrl + "/api/recursos/" + id);
             
-            restTemplate.delete(baseUrl + "/api/recursos/" + id);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Basic " + java.util.Base64.getEncoder().encodeToString("master@reservation.com:master123".getBytes()));
+            
+            HttpEntity<String> request = new HttpEntity<>(headers);
+            
+            restTemplate.exchange(
+                baseUrl + "/api/recursos/" + id,
+                HttpMethod.DELETE,
+                request,
+                Void.class
+            );
             
             log.info("Recurso excluído com sucesso: {}", id);
             
