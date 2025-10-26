@@ -69,7 +69,7 @@ public class TurmaController {
             } else if (usuarioLogado.getTipo() == TipoUsuario.PROFESSOR) {
                 turmas = turmaService.findByProfessorId(usuarioLogado.getId());
             } else {
-                turmas = List.of(); // Para outros tipos de usuário, retorna vazio
+                turmas = List.of(); 
             }
             
             return ResponseEntity.ok(turmas);
