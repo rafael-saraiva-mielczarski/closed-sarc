@@ -3,7 +3,6 @@ package com.closed_sarc.app_registration_api.application.service.impl;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +20,7 @@ import com.closed_sarc.app_registration_api.domain.entities.Evento;
 import com.closed_sarc.app_registration_api.domain.entities.Turma;
 import com.closed_sarc.app_registration_api.domain.repositories.EventoRepository;
 import com.closed_sarc.app_registration_api.domain.repositories.TurmaRepository;
+import com.closed_sarc.app_registration_api.domain.utils.HorarioUtils;
 import com.closed_sarc.app_registration_api.infrastructure.client.dto.ReservaResponseDTO;
 import com.closed_sarc.app_registration_api.service.ReservationService;
 
@@ -100,19 +100,9 @@ public class CronogramaServiceImpl implements CronogramaService {
    * Converte LocalDate e Horario para Instant
    */
   private Instant converterParaInstant(LocalDate data, com.closed_sarc.app_registration_api.domain.entities.Horario horario) {
-    LocalTime horaInicio = obterHoraInicioPorHorario(horario);
-    return data.atTime(horaInicio)
+    return data.atTime(HorarioUtils.obterHoraInicioPorHorario(horario))
         .atZone(ZoneId.of("UTC"))
         .toInstant();
-  }
-
-  /**
-   * Converte o enum Horario para LocalTime
-   */
-  private LocalTime obterHoraInicioPorHorario(com.closed_sarc.app_registration_api.domain.entities.Horario horario) {
-    int horaBase = 8; // Começa às 8h
-    int indice = horario.ordinal();
-    return LocalTime.of(horaBase + indice, 0);
   }
 
   private EventoDTO convertToEventoDTO(Evento evento) {
