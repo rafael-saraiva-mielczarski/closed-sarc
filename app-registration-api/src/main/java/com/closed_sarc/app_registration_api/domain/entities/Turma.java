@@ -47,9 +47,6 @@ public class Turma {
     @Column(nullable = false, length = 5)
     private Horario horario;
 
-    @Column(nullable = true, length = 100)
-    private String sala;
-
     @ElementCollection
     @CollectionTable(name = "turma_dias_aula", joinColumns = @JoinColumn(name = "turma_id"))
     @Column(name = "dia_semana", nullable = false)
