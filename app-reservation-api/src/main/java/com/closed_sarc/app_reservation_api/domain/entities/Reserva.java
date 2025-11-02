@@ -28,4 +28,7 @@ public class Reserva {
 
     @Column(name = "data_uso")
     private Instant dataUso;
+
+    @Column(nullable = false)
+    private Integer quantidade;
 }

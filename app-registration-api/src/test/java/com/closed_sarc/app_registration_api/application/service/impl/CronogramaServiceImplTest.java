@@ -55,7 +55,6 @@ class CronogramaServiceImplTest {
 
     turma = Turma.builder()
         .nome("33A")
-        .sala("401")
         .horario(Horario.A)
         .professor(professor)
         .disciplina(disciplina)
@@ -80,7 +79,6 @@ class CronogramaServiceImplTest {
     assertEquals(1, resultado.getAulasDeHoje().size());
 
     AulaDTO aula = resultado.getAulasDeHoje().get(0);
-    assertEquals("401", aula.getRecurso());
     assertEquals("Prof. Maria Silva", aula.getNomeProfessor());
     assertEquals("Programação Java", aula.getNomeDisciplina());
     assertEquals("(33A)", aula.getTurma());
@@ -121,7 +119,6 @@ class CronogramaServiceImplTest {
 
     Turma turma2 = Turma.builder()
         .nome("33C")
-        .sala("205")
         .horario(Horario.E)
         .professor(professor2)
         .disciplina(disciplina2)
@@ -141,13 +138,11 @@ class CronogramaServiceImplTest {
 
     // Verificar primeira aula
     AulaDTO aula1 = resultado.getAulasDeHoje().get(0);
-    assertEquals("401", aula1.getRecurso());
     assertEquals("Prof. Maria Silva", aula1.getNomeProfessor());
     assertEquals("Programação Java", aula1.getNomeDisciplina());
 
     // Verificar segunda aula
     AulaDTO aula2 = resultado.getAulasDeHoje().get(1);
-    assertEquals("205", aula2.getRecurso());
     assertEquals("Prof. Ana Costa", aula2.getNomeProfessor());
     assertEquals("Desenvolvimento Web", aula2.getNomeDisciplina());
 

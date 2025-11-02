@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Informações de uma aula específica")
 public class AulaDTO {
 
-  @Schema(description = "Nome da sala ou recurso onde a aula ocorre", example = "401")
-  private String recurso;
+  @Schema(description = "ID da turma", example = "550e8400-e29b-41d4-a716-446655440000")
+  private UUID turmaId;
 
   @Schema(description = "Nome do professor responsável pela disciplina", example = "Prof. Maria Silva")
   private String nomeProfessor;
@@ -29,4 +32,7 @@ public class AulaDTO {
 
   @Schema(description = "Horário da aula conforme enum Horario", example = "A")
   private Horario horario;
+
+  @Schema(description = "Lista de recursos reservados para esta turma neste horário", example = "[]")
+  private List<RecursoReservadoDTO> recursosReservados;
 }

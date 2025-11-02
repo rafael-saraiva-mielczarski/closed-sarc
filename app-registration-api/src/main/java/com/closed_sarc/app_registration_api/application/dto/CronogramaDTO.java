@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Cronograma de aulas e eventos do dia")
 public class CronogramaDTO {
 
-  @Schema(description = "Lista de aulas programadas para hoje", example = "[{\"recurso\": \"401\", \"nomeProfessor\": \"Prof. Maria Silva\", \"nomeDisciplina\": \"Programação Java\", \"turma\": \"(33A)\", \"horario\": \"A\"}]")
+  @Schema(description = "Lista de aulas programadas para hoje", example = "[{\"turmaId\": \"550e8400-e29b-41d4-a716-446655440000\", \"nomeProfessor\": \"Prof. Maria Silva\", \"nomeDisciplina\": \"Programação Java\", \"turma\": \"(33A)\", \"horario\": \"A\", \"recursosReservados\": []}]")
   private List<AulaDTO> aulasDeHoje;
 
   @Schema(description = "Lista de eventos programados para hoje", example = "[{\"titulo\": \"Reunião de planejamento\", \"descricao\": \"Reunião para planejamento das próximas atividades\", \"dataInicio\": \"2024-10-16T08:00:00Z\", \"dataFim\": \"2024-10-16T09:30:00Z\"}]")

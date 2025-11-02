@@ -45,7 +45,6 @@ class CronogramaControllerTest {
   void deveRetornar200EAulasQuandoExistemTurmas() throws Exception {
     // Given
     AulaDTO aula1 = AulaDTO.builder()
-        .recurso("401")
         .nomeProfessor("Prof. Maria Silva")
         .nomeDisciplina("Programação Java")
         .turma("(33A)")
@@ -53,7 +52,6 @@ class CronogramaControllerTest {
         .build();
 
     AulaDTO aula2 = AulaDTO.builder()
-        .recurso("205")
         .nomeProfessor("Prof. Ana Costa")
         .nomeDisciplina("Desenvolvimento Web")
         .turma("(33C)")
@@ -74,12 +72,10 @@ class CronogramaControllerTest {
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.aulasDeHoje").isArray())
         .andExpect(jsonPath("$.aulasDeHoje.length()").value(2))
-        .andExpect(jsonPath("$.aulasDeHoje[0].recurso").value("401"))
         .andExpect(jsonPath("$.aulasDeHoje[0].nomeProfessor").value("Prof. Maria Silva"))
         .andExpect(jsonPath("$.aulasDeHoje[0].nomeDisciplina").value("Programação Java"))
         .andExpect(jsonPath("$.aulasDeHoje[0].turma").value("(33A)"))
         .andExpect(jsonPath("$.aulasDeHoje[0].horario").value("A"))
-        .andExpect(jsonPath("$.aulasDeHoje[1].recurso").value("205"))
         .andExpect(jsonPath("$.aulasDeHoje[1].nomeProfessor").value("Prof. Ana Costa"))
         .andExpect(jsonPath("$.aulasDeHoje[1].nomeDisciplina").value("Desenvolvimento Web"))
         .andExpect(jsonPath("$.aulasDeHoje[1].turma").value("(33C)"))

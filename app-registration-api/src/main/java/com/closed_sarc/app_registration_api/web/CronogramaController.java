@@ -36,18 +36,20 @@ public class CronogramaController {
               {
                 "aulasDeHoje": [
                   {
-                    "recurso": "401",
+                    "turmaId": "550e8400-e29b-41d4-a716-446655440000",
                     "nomeProfessor": "Prof. Maria Silva",
                     "nomeDisciplina": "Programação Java",
                     "turma": "(33A)",
-                    "horario": "A"
+                    "horario": "A",
+                    "recursosReservados": []
                   },
                   {
-                    "recurso": "205",
+                    "turmaId": "660e8400-e29b-41d4-a716-446655440001",
                     "nomeProfessor": "Prof. Ana Costa",
                     "nomeDisciplina": "Desenvolvimento Web",
                     "turma": "(33C)",
-                    "horario": "E"
+                    "horario": "E",
+                    "recursosReservados": []
                   }
                 ],
                 "eventosDeHoje": [
