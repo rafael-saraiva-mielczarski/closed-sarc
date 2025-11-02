@@ -5,6 +5,7 @@ import com.closed_sarc.app_registration_api.domain.entities.Horario;
 import com.closed_sarc.app_registration_api.domain.entities.Semestre;
 import com.closed_sarc.app_registration_api.domain.entities.Turma;
 import com.closed_sarc.app_registration_api.domain.repositories.TurmaRepository;
+import com.closed_sarc.app_registration_api.domain.utils.HorarioUtils;
 import com.closed_sarc.app_registration_api.infrastructure.client.dto.ReservaResponseDTO;
 import com.closed_sarc.app_registration_api.service.ReservationService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,21 +77,9 @@ public class ReservaService {
      * Assumindo que cada letra representa um período de aula (ex: A = 08:00-09:00)
      */
     private Instant converterParaInstant(LocalDate data, Horario horario) {
-        LocalTime horaInicio = obterHoraInicioPorHorario(horario);
-        return data.atTime(horaInicio)
+        return data.atTime(HorarioUtils.obterHoraInicioPorHorario(horario))
                 .atZone(ZoneId.of("UTC"))
                 .toInstant();
-    }
-
-    /**
-     * Converte o enum Horario para LocalTime
-     * Mapeamento básico: A=08:00, B=09:00, C=10:00, etc.
-     * Pode ser ajustado conforme necessário
-     */
-    private LocalTime obterHoraInicioPorHorario(Horario horario) {
-        int horaBase = 8; // Começa às 8h
-        int indice = horario.ordinal();
-        return LocalTime.of(horaBase + indice, 0);
     }
 
     /**
