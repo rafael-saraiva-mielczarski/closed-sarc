@@ -26,13 +26,13 @@ public class CronogramaController {
   private final CronogramaService cronogramaService;
 
   @GetMapping()
-  @Operation(summary = "Consultar cronograma do dia atual", description = "Retorna todas as aulas programadas para o dia atual. "
+  @Operation(summary = "Consultar cronograma do dia atual", description = "Retorna todas as aulas e eventos programados para o dia atual. "
       +
       "Este endpoint é público e não requer autenticação. " +
       "O dia da semana é detectado automaticamente com base na data atual do sistema.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Cronograma consultado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CronogramaDTO.class), examples = {
-          @ExampleObject(name = "Com aulas", description = "Exemplo quando há aulas programadas para hoje", value = """
+          @ExampleObject(name = "Com aulas e eventos", description = "Exemplo quando há aulas e eventos programados para hoje", value = """
               {
                 "aulasDeHoje": [
                   {
@@ -49,12 +49,21 @@ public class CronogramaController {
                     "turma": "(33C)",
                     "horario": "E"
                   }
+                ],
+                "eventosDeHoje": [
+                  {
+                    "titulo": "Reunião de planejamento",
+                    "descricao": "Reunião para planejamento das próximas atividades",
+                    "dataInicio": "2024-10-16T08:00:00Z",
+                    "dataFim": "2024-10-16T09:30:00Z"
+                  }
                 ]
               }
               """),
-          @ExampleObject(name = "Sem aulas", description = "Exemplo quando não há aulas programadas para hoje", value = """
+          @ExampleObject(name = "Sem aulas", description = "Exemplo quando não há aulas nem eventos para hoje", value = """
               {
-                "aulasDeHoje": []
+                "aulasDeHoje": [],
+                "eventosDeHoje": []
               }
               """)
       })),

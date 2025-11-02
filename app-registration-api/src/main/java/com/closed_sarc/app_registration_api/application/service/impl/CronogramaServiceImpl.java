@@ -1,6 +1,7 @@
 package com.closed_sarc.app_registration_api.application.service.impl;
 
 import java.time.DayOfWeek;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -10,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.closed_sarc.app_registration_api.application.dto.AulaDTO;
 import com.closed_sarc.app_registration_api.application.dto.CronogramaDTO;
+import com.closed_sarc.app_registration_api.application.dto.EventoDTO;
 import com.closed_sarc.app_registration_api.application.service.CronogramaService;
 import com.closed_sarc.app_registration_api.domain.entities.DiaSemana;
+import com.closed_sarc.app_registration_api.domain.entities.Evento;
 import com.closed_sarc.app_registration_api.domain.entities.Turma;
+import com.closed_sarc.app_registration_api.domain.repositories.EventoRepository;
 import com.closed_sarc.app_registration_api.domain.repositories.TurmaRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class CronogramaServiceImpl implements CronogramaService {
 
   private final TurmaRepository turmaRepository;
+  private final EventoRepository eventoRepository;
 
   @Override
   public CronogramaDTO consultarCronograma() {
@@ -29,18 +34,24 @@ public class CronogramaServiceImpl implements CronogramaService {
 
     List<Turma> turmasDeHoje = turmaRepository.findByDiasAulaContaining(hoje);
 
-    if (turmasDeHoje.isEmpty()) {
-      return CronogramaDTO.builder()
-          .aulasDeHoje(Collections.emptyList())
-          .build();
-    }
+    List<AulaDTO> aulas = turmasDeHoje.isEmpty() 
+        ? Collections.emptyList()
+        : turmasDeHoje.stream()
+            .map(this::convertToAulaDTO)
+            .collect(Collectors.toList());
 
-    List<AulaDTO> aulas = turmasDeHoje.stream()
-        .map(this::convertToAulaDTO)
-        .collect(Collectors.toList());
+    // Buscar eventos do dia atual
+    List<Evento> eventosDeHoje = eventoRepository.findByData(Instant.now());
+
+    List<EventoDTO> eventos = eventosDeHoje.isEmpty()
+        ? Collections.emptyList()
+        : eventosDeHoje.stream()
+            .map(this::convertToEventoDTO)
+            .collect(Collectors.toList());
 
     return CronogramaDTO.builder()
         .aulasDeHoje(aulas)
+        .eventosDeHoje(eventos)
         .build();
   }
 
@@ -52,6 +63,15 @@ public class CronogramaServiceImpl implements CronogramaService {
         .nomeDisciplina(turma.getDisciplina().getNome())
         .turma("(" + turma.getNome() + ")")
         .horario(turma.getHorario())
+        .build();
+  }
+
+  private EventoDTO convertToEventoDTO(Evento evento) {
+    return EventoDTO.builder()
+        .titulo(evento.getTitulo())
+        .descricao(evento.getDescricao())
+        .dataInicio(evento.getDataInicio())
+        .dataFim(evento.getDataFim())
         .build();
   }
 
