@@ -46,4 +46,8 @@ public class UsuarioService {
     public boolean existsById(UUID id) {
         return usuarioRepository.existsById(id);
     }
+
+    public Usuario salvar(Usuario usuario) {
+        return usuarioRepository.save(usuario);
+    }
 }

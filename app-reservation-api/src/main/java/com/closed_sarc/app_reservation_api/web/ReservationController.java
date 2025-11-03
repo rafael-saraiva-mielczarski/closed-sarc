@@ -2,6 +2,8 @@ package com.closed_sarc.app_reservation_api.web;
 
 import com.closed_sarc.app_reservation_api.domain.entities.Reserva;
 import com.closed_sarc.app_reservation_api.service.ReservationService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/reservas")
 @RequiredArgsConstructor
+@Tag(name = "Reservas", description = "Endpoints para gerenciamento de reservas de recursos e salas")
 public class ReservationController {
     private final ReservationService reservationService;
 
