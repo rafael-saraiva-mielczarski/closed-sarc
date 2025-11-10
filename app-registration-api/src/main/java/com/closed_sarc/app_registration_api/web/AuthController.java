@@ -1,5 +1,17 @@
 package com.closed_sarc.app_registration_api.web;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.closed_sarc.app_registration_api.application.dto.TrocarSenhaRequestDTO;
 import com.closed_sarc.app_registration_api.domain.entities.Usuario;
 import com.closed_sarc.app_registration_api.service.UsuarioService;
 
@@ -8,16 +20,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
-import com.closed_sarc.app_registration_api.application.dto.TrocarSenhaRequestDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,7 +29,6 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UsuarioService usuarioService;
-    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -54,15 +56,10 @@ public class AuthController {
                                             @RequestBody TrocarSenhaRequestDTO request) {
         try {
             Usuario usuario = (Usuario) authentication.getPrincipal();
-
-            if (!passwordEncoder.matches(request.getSenhaAtual(), usuario.getSenha())) {
-                return ResponseEntity.badRequest().body("Senha atual incorreta");
-            }
-
-            usuario.setSenha(passwordEncoder.encode(request.getNovaSenha()));
-            usuarioService.salvar(usuario);
-
+            usuarioService.alterarSenha(usuario, request.getSenhaAtual(), request.getNovaSenha());
             return ResponseEntity.ok("Senha alterada com sucesso");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao alterar senha");
