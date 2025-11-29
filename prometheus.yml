@@ -1,0 +1,24 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'app-registration-api'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['registration-api:8081']
+        labels:
+          application: 'registration-api'
+          environment: 'production'
+
+  - job_name: 'app-reservation-api'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['reservation-api:8082']
+        labels:
+          application: 'reservation-api'
+          environment: 'production'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

@@ -2,6 +2,11 @@ server:
   port: 8081
 
 spring:
+  application:
+    name: closed-sarc-api
+  docker:
+    compose:
+      enabled: false
   datasource:
     url: jdbc:postgresql://localhost:5432/closed_sarc_db
     username: closed_sarc
@@ -14,8 +19,32 @@ spring:
         jdbc:
           time_zone: UTC
 
-# Configurações para comunicação com reservation-api
 reservation-api:
   base-url: http://reservation-api:8082
   username: master@reservation.com
   password: master123
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
