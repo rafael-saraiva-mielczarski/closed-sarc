@@ -40,6 +40,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Permitir acesso ao Swagger
+                        .requestMatchers("/actuator/**").permitAll() // Permitir acesso aos endpoints do Actuator/Prometheus
                         .anyRequest().authenticated()
                 )
                 .httpBasic(basic -> {})

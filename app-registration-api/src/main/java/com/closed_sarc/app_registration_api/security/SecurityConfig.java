@@ -32,10 +32,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/cronograma/**").permitAll() // Permitir acesso público ao cronograma
-                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Permitir
-                                                                                                              // acesso
-                                                                                                              // ao
-                                                                                                              // OpenAPI
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll() // Permitir acesso ao Swagger
+                        .requestMatchers("/actuator/**").permitAll() // Permitir acesso aos endpoints do Actuator/Prometheus
                         .anyRequest().authenticated())
                 .httpBasic(basic -> {
                 })
