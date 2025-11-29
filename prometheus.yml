@@ -6,7 +6,7 @@ scrape_configs:
   - job_name: 'app-registration-api'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['localhost:8081']
+      - targets: ['registration-api:8081']
         labels:
           application: 'registration-api'
           environment: 'production'
@@ -14,7 +14,7 @@ scrape_configs:
   - job_name: 'app-reservation-api'
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['localhost:8082']
+      - targets: ['reservation-api:8082']
         labels:
           application: 'reservation-api'
           environment: 'production'
