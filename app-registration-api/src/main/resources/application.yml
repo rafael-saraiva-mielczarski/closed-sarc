@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: closed-sarc-api
+    name: app-registration-api
   docker:
     compose:
       enabled: false
@@ -18,6 +18,17 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
 
 reservation-api:
   base-url: http://reservation-api:8082
@@ -45,6 +56,3 @@ management:
   tracing:
     sampling:
       probability: 1.0
-  otlp:
-    tracing:
-      endpoint: http://localhost:4318/v1/traces
