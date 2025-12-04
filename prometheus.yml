@@ -3,6 +3,22 @@ global:
   evaluation_interval: 15s
 
 scrape_configs:
+  - job_name: 'eureka-server'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['eureka-server:8761']
+        labels:
+          application: 'eureka-server'
+          environment: 'production'
+
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['api-gateway:8080']
+        labels:
+          application: 'api-gateway'
+          environment: 'production'
+
   - job_name: 'app-registration-api'
     metrics_path: '/actuator/prometheus'
     static_configs:
