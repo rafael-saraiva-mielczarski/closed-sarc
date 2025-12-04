@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: app-registration-api
+  cloud:
+    compatibility-verifier:
+      enabled: false
   docker:
     compose:
       enabled: false
